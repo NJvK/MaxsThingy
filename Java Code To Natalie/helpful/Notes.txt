@@ -1,0 +1,8 @@
+To recompile the entire package, run the following command in cmd in the folder holding "helpful"
+javac -d . helpful/*.java
+
+Drawer contains many different ways to draw a stacked string and a few shapes
+
+Rectangle contains rectangle code for help with intersections and what-not
+
+datastructures folder contains my current collection of datastructures to be used where ever

@@ -1,0 +1,44 @@
+header[32]
+To: [ip: 0,1,2,3,,4,5] : 256.256.256.256:65535 (0.0.0.0 means host/server)
+From: [ip: 6,7,8,9,,10,11] : 256.256.256.256:65535 (0.0.0.0 means host/server), (port=0 -> unknown port number)
+Time sent: [12,13,14,15,16,17,18,19] : 9Q
+Boolean Data: [20[0] isComplete, 20[1] isClosing, 20[2] NewConnectionCreated(reads the packet data), 20[3] Ping, 20[4] isEncrypted]
+DEPRECATED  -  Primitive data type: [21[0-3]] : 16 - if char(6), [3] stores if they are strings or individual chars
+Size: [21, 22, 23, 24] : 2.1B
+Error: [25, 26] : 65k
+27-31 Empty
+Bug Fixing: [32] = 1 - if server closes socket - reader goes crazy spitting 0s, this'll spot it and die
+
+Package[65k maximum]
+just stores the values given to it
+
+Primitive data types:
+0 : byte - 2^8
+1 : short - 2^16 = 65k
+2 : int - 2^32
+3 : long - 2^64
+4 : float - 2^32
+5 : double - 2^64
+6 : char - 2^16
+7 : boolean - 2^1
+
+On New Connection Created
+Note - Header[From] contains source IP : Port
+[0] - boolean data ([0] = isServer, [1] = has other connections)
+[1] - Number of connections (each individual socket) (256 maximum on creation)
+[2 - 2 + 32*[1] + 26] - each sockets ipAddress + port + 26 low precision chars, ending with 26 characters for the source's name
+
+On Connection closing - NOTES
+Header[From] contains source IP
+Header[To] contains 0.0.0.0 as IP
+Size will be 0
+
+Error codes:
+0   - No errors
+100 - Destination full - triggered if trying to connect to a server that doesn't have the client space for you
+404 - destination not found - Contains header of failed packet in data section
+
+Notes:
+9500, ├
+9474, │
+9492, └
